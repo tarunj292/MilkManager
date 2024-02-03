@@ -88,7 +88,7 @@
             android:layout_height="0dp"
             android:id="@+id/adha"
             android:layout_rowWeight="1"
-            android:layout_columnSpan=""
+            android:layout_columnSpan="1"
             android:layout_columnWeight="1"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
