@@ -48,15 +48,12 @@
         app:layout_constraintTop_toBottomOf="@+id/today"
         tools:layout_editor_absoluteX="20dp" />
 
-    <TextView
-        android:id="@+id/entries"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entriesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Entries"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintTop_toBottomOf="@+id/month"
         tools:layout_editor_absoluteX="20dp" />
 
@@ -66,10 +63,24 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="40dp"
-        android:columnCount="3"
-        android:rowCount="3"
+        android:columnCount="4"
+        android:rowCount="4"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/entries">
+        app:layout_constraintTop_toBottomOf="@id/entriesRecyclerView">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtQty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_medium"
+            android:hint="Enter value"
+            android:textColorHint="@color/white"
+            android:textSize="30sp"
+            app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -148,22 +159,9 @@
             android:text="2"
             android:textSize="30sp"
             app:cornerRadius="15dp"/>
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtQty"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/montserrat_medium"
-            android:hint="Enter value"
-            android:textColorHint="@color/white"
-            android:textSize="30sp"
-            app:cornerRadius="15dp"/>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnQty"
+
+        <ImageButton
+            android:id="@+id/goBack"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
@@ -172,9 +170,37 @@
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
+            android:src="@drawable/go_back"
+            app:cornerRadius="15dp"
+            android:contentDescription="Go Back"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_medium"
             android:text="Submit"
             android:textSize="17sp"
             app:cornerRadius="15dp"/>
+        <ImageButton
+            android:id="@+id/goForward"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_medium"
+            android:src="@drawable/go_forward"
+            app:cornerRadius="15dp"
+            android:contentDescription="Go Forward"/>
+
+
 
     </GridLayout>
 
