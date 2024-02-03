@@ -2,6 +2,8 @@ package com.example.milkmanager
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.milkmanager.databinding.ActivityCustomerMilkEntryBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -10,7 +12,9 @@ import java.util.Locale
 class CustomerMilkEntry : AppCompatActivity() {
 
     private lateinit var binding : ActivityCustomerMilkEntryBinding
-
+    private lateinit var offersList: ArrayList<String>
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var entriesadapter: EntriesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomerMilkEntryBinding.inflate(layoutInflater)
@@ -19,40 +23,47 @@ class CustomerMilkEntry : AppCompatActivity() {
         val btnQty = binding.btnQty
 
         binding.pav.setOnClickListener{
-            doEntry("0.25 litres")
+            doEntry("0.25")
         }
 
         binding.adha.setOnClickListener{
-            doEntry("0.5 litres")
+            doEntry("0.5")
         }
 
         binding.pona.setOnClickListener{
-            doEntry("0.75 litres")
+            doEntry("0.75")
         }
 
         binding.one.setOnClickListener{
-            doEntry("1 litres")
+            doEntry("1")
         }
 
         binding.dad.setOnClickListener{
-            doEntry("1.5 litres")
+            doEntry("1.5")
         }
 
         binding.two.setOnClickListener{
-            doEntry("2 litres")
+            doEntry("2")
         }
 
         btnQty.setOnClickListener{
             val txtQty = binding.txtQty.text.toString()
-            doEntry("$txtQty litres")
+            doEntry("$txtQty")
         }
+        val date = getCurrentDate()
+        binding.today.text = date
 
-        binding.today.text = getCurrentDate()
+        //        Recycler View for entries
+        offersList = arrayListOf()
+        recyclerView = binding.entriesRecyclerView
+        entriesadapter = EntriesAdapter(offersList, date)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = entriesadapter
 
     }
-
     private fun doEntry(value: String) {
-        binding.entries.text = value
+        offersList.add(value)
+        entriesadapter.notifyDataSetChanged()
     }
 
     private fun getCurrentDate(): String {
