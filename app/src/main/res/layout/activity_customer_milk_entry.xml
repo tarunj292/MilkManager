@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Month Details"
+        android:gravity="end"
+        android:text="03 Feb 2024"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintTop_toBottomOf="@+id/custName"
@@ -65,8 +66,8 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="40dp"
-        android:columnCount="4"
-        android:rowCount="2"
+        android:columnCount="3"
+        android:rowCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/entries">
         <com.google.android.material.button.MaterialButton
@@ -80,20 +81,20 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="0.25"
-            android:textSize="19sp"
+            android:textSize="16sp"
             app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:id="@+id/adha"
             android:layout_rowWeight="1"
-            android:layout_columnSpan="1"
+            android:layout_columnSpan=""
             android:layout_columnWeight="1"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="0.5"
-            android:textSize="27sp"
+            android:textSize="23sp"
             app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
@@ -106,7 +107,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="0.75"
-            android:textSize="19sp"
+            android:textSize="16sp"
             app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
@@ -132,7 +133,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="1.5"
-            android:textSize="30sp"
+            android:textSize="29sp"
             app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
@@ -160,6 +161,19 @@
             android:hint="Enter value"
             android:textColorHint="@color/white"
             android:textSize="30sp"
+            app:cornerRadius="15dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Submit"
+            android:textSize="17sp"
             app:cornerRadius="15dp"/>
 
     </GridLayout>
