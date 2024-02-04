@@ -2,6 +2,11 @@ package com.example.milkmanager
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +41,35 @@ class CustomerMilkEntry : AppCompatActivity() {
         val mDbRef = FirebaseDatabase.getInstance().reference
         val databaseReference = mDbRef.child(year).child(month)
 
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val custList = mutableListOf<String>()
+
+
+                for (snapshot in dataSnapshot.children) {
+                    val custName = snapshot.key
+                    if (custName != null) {
+                        custList.add(custName)
+                    }
+                }
+
+                val autoComplete: AutoCompleteTextView = findViewById(R.id.auto_complete)
+                val adapter = ArrayAdapter(this@CustomerMilkEntry, R.layout.list_item, custList)
+                autoComplete.setAdapter(adapter)
+                autoComplete.onItemClickListener =
+                    AdapterView.OnItemClickListener { adapterView: AdapterView<*>, view2: View, i: Int, l: Long ->
+                        val itemselected = adapterView.getItemAtPosition(i)
+                        getThisCustData(itemselected.toString())
+                    }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle onCancelled event
+                Toast.makeText(this@CustomerMilkEntry, "Failed to retrieve data from Firebase", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
         entriesHashMap = hashMapOf()
         recyclerView = binding.entriesRecyclerView
         entriesAdapter = EntriesAdapter(entriesHashMap, date)
@@ -66,60 +100,93 @@ class CustomerMilkEntry : AppCompatActivity() {
         })
 
         binding.pav.setOnClickListener {
-            createDataInDB()
+            doEntry("0.25", day)
         }
 
         binding.adha.setOnClickListener {
-            doEntry("0.5",date)
+            doEntry("0.5",day)
         }
 
         binding.pona.setOnClickListener {
-            doEntry("0.75", date)
+            doEntry("0.75", day)
         }
 
         binding.one.setOnClickListener {
-            doEntry("1", date)
+            doEntry("1", day)
         }
 
         binding.dad.setOnClickListener {
-            doEntry("1.5", date)
+            doEntry("1.5", day)
         }
 
         binding.two.setOnClickListener {
-            doEntry("2", date)
+            doEntry("2", day)
         }
 
         binding.btnQty.setOnClickListener {
             val txtQty = binding.txtQty.text.toString()
-            doEntry(txtQty, date)
+            doEntry(txtQty, day)
         }
 
         binding.goBack.setOnClickListener{
-            val whereToChange = day+"D"
-            changeEntry(whereToChange, "0")
+
         }
 
-        binding.today.text = date
+        binding.goForward.setOnClickListener{
 
+        }
 
     }
-    private fun createDataInDB() {
+
+    private fun getThisCustData(itemselected: String) {
+        val mDbRef = FirebaseDatabase.getInstance().reference
+        val databaseReference = mDbRef.child("2024").child("02")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(monthSnap: DataSnapshot) {
+                entriesHashMap.clear()
+                for(custSnap in monthSnap.children){
+                    if(custSnap.key == itemselected){
+                        val gotHashMap = custSnap.getValue<HashMap<String, String>>()
+                        if (gotHashMap != null) {
+                            for((key,value) in gotHashMap){
+//                                    Toast.makeText(this@CustomerMilkEntry,"$key",Toast.LENGTH_SHORT).show()
+                                entriesHashMap[key] = value
+                            }
+                        }
+                    }
+                }
+                entriesAdapter.notifyDataSetChanged()
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(this@CustomerMilkEntry, "error", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun createDataInDB(text: String?) {
         mDbRef = FirebaseDatabase.getInstance().reference
         val entries = (1..31).associateWith { "0" }
             .mapKeys { "${it.key.toString().padStart(2, '0')}D" }
         //above 2 lines are converted from for loop into this
-        mDbRef.child("2024").child("02").child("SagarPark").setValue(entries)
+        if (text != null) {
+            mDbRef.child("2024").child("02").child(text).setValue(entries)
+        }
     }
 
-    private fun doEntry(value: String, date: String) {
-        mDbRef = FirebaseDatabase.getInstance().reference
-        var entries: HashMap<Double, String> = hashMapOf()
-        for(i in 1..29){
-            entries[i.toDouble()] = "0"
-        }
-        mDbRef.child(date.substring(6, 10)).child(date.substring(3, 5)).child("SagarPark").key
-        mDbRef = FirebaseDatabase.getInstance().reference
+    private fun doEntry(value: String, day: String) {
+        val custName = binding.autoComplete.text.toString()
+        Toast.makeText(this@CustomerMilkEntry, "$custName",Toast.LENGTH_SHORT).show()
+        val entryKey = "${day.padStart(2, '0')}D"
+        val entryValue = value
+
+        val mDbRef = FirebaseDatabase.getInstance().reference
+        val entryRef = mDbRef.child("2024").child("02").child(custName).child(entryKey)
+
+        entryRef.setValue(entryValue)
     }
+
 
     private fun changeEntry(whereToChange:String, change: String){
         var mDbRef = FirebaseDatabase.getInstance().reference
