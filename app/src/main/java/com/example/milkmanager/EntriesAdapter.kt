@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 
-class EntriesAdapter(private val offersList: List<String>, private val currentDate: String):
+class EntriesAdapter(private val offersList: HashMap<String, String>, private val currentDate: String):
     RecyclerView.Adapter<EntriesAdapter.MyViewHolder>()
 {
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
@@ -27,14 +27,13 @@ class EntriesAdapter(private val offersList: List<String>, private val currentDa
     }
 
 
-
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.date.text = currentDate.substring(0, 2) // prints only day og month
-        holder.qty.text = offersList[position]
+        val entry = offersList.entries.elementAt(position)
+        holder.date.text = entry.key // prints day
+        holder.qty.text = entry.value
         val context = holder.itemView.context
-
     }
+
 
 
     override fun getItemCount() = offersList.size
