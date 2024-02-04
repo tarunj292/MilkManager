@@ -18,11 +18,13 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
             <AutoCompleteTextView
-                android:id="@+id/auto_complete"
+                android:id="@+id/custName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/item_label"
@@ -32,27 +34,32 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+            <AutoCompleteTextView
+                android:id="@+id/autoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/item_label"
+                android:textColorHint="@color/white"
+                android:inputType="none"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/custName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:fontFamily="@font/montserrat_medium"
-        android:text="B 408"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/entriesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginHorizontal="20dp"
         android:fontFamily="@font/montserrat_medium"
-        app:layout_constraintTop_toBottomOf="@+id/custName"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="20dp" />
 
     <GridLayout
@@ -70,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_rowWeight="1"
-            android:layout_columnSpan="2"
+            android:layout_columnSpan="1"
             android:layout_columnWeight="1"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
@@ -78,6 +85,7 @@
             android:hint="@string/enter_value"
             android:textColorHint="@color/white"
             android:textSize="30sp"
+            android:inputType="number"
             app:cornerRadius="15dp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
@@ -157,6 +165,24 @@
             android:text="@string/_2"
             android:textSize="30sp"
             app:cornerRadius="15dp"/>
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnSpan="1"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="10dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_medium"
+            android:hint="@string/enter_date"
+            android:textColorHint="@color/white"
+            android:textSize="30sp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cornerRadius="15dp"/>
+
 
         <ImageButton
             android:id="@+id/goBack"
