@@ -2,7 +2,6 @@ package com.example.milkmanager
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -57,7 +56,7 @@ class CustomerMilkEntry : AppCompatActivity() {
                 val adapter = ArrayAdapter(this@CustomerMilkEntry, R.layout.list_item, custList)
                 autoComplete.setAdapter(adapter)
                 autoComplete.onItemClickListener =
-                    AdapterView.OnItemClickListener { adapterView: AdapterView<*>, view2: View, i: Int, l: Long ->
+                    AdapterView.OnItemClickListener { adapterView: AdapterView<*>, _: View, i: Int, _: Long ->
                         val itemselected = adapterView.getItemAtPosition(i)
                         getThisCustData(itemselected.toString())
                     }
@@ -129,13 +128,56 @@ class CustomerMilkEntry : AppCompatActivity() {
         }
 
         binding.goBack.setOnClickListener{
-
+            val autoComplete: AutoCompleteTextView = findViewById(R.id.auto_complete)
+            val adapter = autoComplete.adapter as ArrayAdapter<String>
+            val selectedItem = autoComplete.text.toString()
+            val index = adapter.getPosition(selectedItem)
+            val getCustNameByIndex = adapter.getItem(index-1)
+            Toast.makeText(this@CustomerMilkEntry,"$getCustNameByIndex",Toast.LENGTH_SHORT).show()
+            if (getCustNameByIndex != null) {
+                changeCustNameInDropDown(getCustNameByIndex)
+            }
         }
 
         binding.goForward.setOnClickListener{
-
+            val autoComplete: AutoCompleteTextView = findViewById(R.id.auto_complete)
+            val adapter = autoComplete.adapter as ArrayAdapter<String>
+            val selectedItem = autoComplete.text.toString()
+            val index = adapter.getPosition(selectedItem)
+            val getCustNameByIndex = adapter.getItem(index+1)
+            Toast.makeText(this@CustomerMilkEntry,"$getCustNameByIndex",Toast.LENGTH_SHORT).show()
+            if (getCustNameByIndex != null) {
+                changeCustNameInDropDown(getCustNameByIndex)
+            }
         }
+    }
+    private fun changeCustNameInDropDown(getCustNameByIndex: String) {
 
+        val mDbRef = FirebaseDatabase.getInstance().reference
+        val databaseReference = mDbRef.child("2024").child("02")
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val custList = mutableListOf<String>()
+
+                for (snapshot in dataSnapshot.children) {
+                    val custName = snapshot.key
+                    if (custName != null) {
+                        custList.add(custName)
+                    }
+                }
+
+                val autoComplete: AutoCompleteTextView = findViewById(R.id.auto_complete)
+                val adapter = ArrayAdapter(this@CustomerMilkEntry, R.layout.list_item, custList)
+                autoComplete.setText(getCustNameByIndex)
+                autoComplete.setAdapter(adapter)
+                getThisCustData(getCustNameByIndex)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle onCancelled event
+                Toast.makeText(this@CustomerMilkEntry, "Failed to retrieve data from Firebase", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun getThisCustData(itemselected: String) {
@@ -149,7 +191,6 @@ class CustomerMilkEntry : AppCompatActivity() {
                         val gotHashMap = custSnap.getValue<HashMap<String, String>>()
                         if (gotHashMap != null) {
                             for((key,value) in gotHashMap){
-//                                    Toast.makeText(this@CustomerMilkEntry,"$key",Toast.LENGTH_SHORT).show()
                                 entriesHashMap[key] = value
                             }
                         }
@@ -177,19 +218,18 @@ class CustomerMilkEntry : AppCompatActivity() {
 
     private fun doEntry(value: String, day: String) {
         val custName = binding.autoComplete.text.toString()
-        Toast.makeText(this@CustomerMilkEntry, "$custName",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@CustomerMilkEntry, custName,Toast.LENGTH_SHORT).show()
         val entryKey = "${day.padStart(2, '0')}D"
-        val entryValue = value
 
         val mDbRef = FirebaseDatabase.getInstance().reference
         val entryRef = mDbRef.child("2024").child("02").child(custName).child(entryKey)
 
-        entryRef.setValue(entryValue)
+        entryRef.setValue(value)
     }
 
 
     private fun changeEntry(whereToChange:String, change: String){
-        var mDbRef = FirebaseDatabase.getInstance().reference
+        val mDbRef = FirebaseDatabase.getInstance().reference
 
         mDbRef.child("2024").child("02").child("SagarPark").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
