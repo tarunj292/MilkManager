@@ -28,11 +28,16 @@ class EntriesAdapter(private val offersList: HashMap<String, String>, private va
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val entry = offersList.entries.elementAt(position)
+        // Sorting the entries of the HashMap by keys
+        val sortedEntries = offersList.entries.sortedBy { it.key }
+
+        // Getting the entry at the current position after sorting
+        val entry = sortedEntries[position]
+
         holder.date.text = entry.key // prints day
         holder.qty.text = entry.value
-        val context = holder.itemView.context
     }
+
 
 
 

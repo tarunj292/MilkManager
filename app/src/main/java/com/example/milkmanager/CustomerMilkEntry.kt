@@ -15,13 +15,12 @@ import com.google.firebase.database.getValue
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.TreeMap
 
 class CustomerMilkEntry : AppCompatActivity() {
 
     private lateinit var mDbRef: DatabaseReference
     private lateinit var binding : ActivityCustomerMilkEntryBinding
-    private lateinit var offersList: HashMap<String, String>
+    private lateinit var entriesHashMap: HashMap<String, String>
     private lateinit var recyclerView: RecyclerView
     private lateinit var entriesAdapter: EntriesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,37 +28,36 @@ class CustomerMilkEntry : AppCompatActivity() {
         binding = ActivityCustomerMilkEntryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val btnQty = binding.btnQty
         val date = getTodayDate()
-
-        val mDbRef = FirebaseDatabase.getInstance().reference
         val year = date.substring(6, 10)
         val month = date.substring(3, 5)
         val day = date.substring(0, 2)
 
+        val mDbRef = FirebaseDatabase.getInstance().reference
         val databaseReference = mDbRef.child(year).child(month)
 
-        offersList = hashMapOf()
+        entriesHashMap = hashMapOf()
         recyclerView = binding.entriesRecyclerView
-        entriesAdapter = EntriesAdapter(offersList, date)
+        entriesAdapter = EntriesAdapter(entriesHashMap, date)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = entriesAdapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(monthSnap: DataSnapshot) {
-                offersList.clear()
+                entriesHashMap.clear()
                     for(custSnap in monthSnap.children){
-                        Toast.makeText(this@CustomerMilkEntry, "$custSnap", Toast.LENGTH_SHORT).show()
                         if(custSnap.key == "SagarPark"){
                             val gotHashMap = custSnap.getValue<HashMap<String, String>>()
                             if (gotHashMap != null) {
                                 for((key,value) in gotHashMap){
-                                    offersList[key] = value
+//                                    Toast.makeText(this@CustomerMilkEntry,"$key",Toast.LENGTH_SHORT).show()
+                                    entriesHashMap[key] = value
                                 }
                             }
                         }
                     }
                 entriesAdapter.notifyDataSetChanged()
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -68,11 +66,11 @@ class CustomerMilkEntry : AppCompatActivity() {
         })
 
         binding.pav.setOnClickListener {
-            changeEntry()
+            createDataInDB()
         }
 
         binding.adha.setOnClickListener {
-            createDataInDB()
+            doEntry("0.5",date)
         }
 
         binding.pona.setOnClickListener {
@@ -91,17 +89,14 @@ class CustomerMilkEntry : AppCompatActivity() {
             doEntry("2", date)
         }
 
-        btnQty.setOnClickListener {
+        binding.btnQty.setOnClickListener {
             val txtQty = binding.txtQty.text.toString()
             doEntry(txtQty, date)
         }
 
         binding.goBack.setOnClickListener{
-            mDbRef.child(year).child(month).child(day).removeValue().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    offersList.clear()
-                    entriesAdapter.notifyDataSetChanged()
-                }}
+            val whereToChange = day+"D"
+            changeEntry(whereToChange, "0")
         }
 
         binding.today.text = date
@@ -110,10 +105,9 @@ class CustomerMilkEntry : AppCompatActivity() {
     }
     private fun createDataInDB() {
         mDbRef = FirebaseDatabase.getInstance().reference
-        var entries: HashMap<String, String> = hashMapOf()
-        for(i in 1..29){
-            entries["${i}D"] = "0"
-        }
+        val entries = (1..31).associateWith { "0" }
+            .mapKeys { "${it.key.toString().padStart(2, '0')}D" }
+        //above 2 lines are converted from for loop into this
         mDbRef.child("2024").child("02").child("SagarPark").setValue(entries)
     }
 
@@ -127,18 +121,17 @@ class CustomerMilkEntry : AppCompatActivity() {
         mDbRef = FirebaseDatabase.getInstance().reference
     }
 
-    private fun changeEntry(){
+    private fun changeEntry(whereToChange:String, change: String){
         var mDbRef = FirebaseDatabase.getInstance().reference
 
         mDbRef.child("2024").child("02").child("SagarPark").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get the HashMap from the dataSnapshot
-                Toast.makeText(this@CustomerMilkEntry,"$dataSnapshot",Toast.LENGTH_SHORT).show()
                 val entries = dataSnapshot.getValue<HashMap<String, String>>()
 
                 // Update the value in the HashMap
                 entries?.let {
-                    it["10D"] = "2" // Update value at key "5"
+                    it[whereToChange] = change // Update value at key "5"
                 }
 
                 // Set the updated HashMap back to the database
