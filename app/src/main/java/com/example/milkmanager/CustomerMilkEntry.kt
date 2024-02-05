@@ -51,6 +51,8 @@ class CustomerMilkEntry : AppCompatActivity() {
         buildingAutoComplete.setAdapter(adapter)
         buildingAutoComplete.onItemClickListener = AdapterView.OnItemClickListener { adapterView: AdapterView<*>, _: View, i: Int, _: Long ->
             val itemSelected = adapterView.getItemAtPosition(i)
+            binding.custName.visibility = View.VISIBLE
+            binding.layoutMain.visibility = View.VISIBLE
             getThisBuildingsCustomer(itemSelected.toString(), customerList)
         }
 
@@ -265,11 +267,9 @@ class CustomerMilkEntry : AppCompatActivity() {
                         }
                         val selectedItem = binding.custName.text.toString()
                         if (customerList.contains(selectedItem)) {
-                            Toast.makeText(this@CustomerMilkEntry,"$selectedItem $customerList", Toast.LENGTH_SHORT).show()
                             binding.custName.setText(selectedItem)
                             getThisCustomerData(selectedItem)
                         } else {
-                            Toast.makeText(this@CustomerMilkEntry, "Working $selectedItem $customerList", Toast.LENGTH_SHORT).show()
                             binding.custName.setText(customerList.getOrNull(0))
                             getThisCustomerData(customerList[0])
                         }
