@@ -39,8 +39,7 @@ class CustomerMilkEntry : AppCompatActivity() {
         val month = date.substring(3, 5)
         val day = date.substring(0, 2)
 
-        val buildingList = listOf("Harsha","Kanan","Rekha","Seth " +
-                "Enclave","Usha Villa")
+        val buildingList = listOf("Harsha","Kanan","Rekha","Seth Enclave","Usha Villa")
         val customerList = mutableListOf<String>()
 
         val buildingAutoComplete: AutoCompleteTextView = findViewById(R.id.buildName)
@@ -92,6 +91,8 @@ class CustomerMilkEntry : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = entriesAdapter
 
+
+//        below code from line 96 to 119 never executes because of no change in database customer name in real time
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(monthSnap: DataSnapshot) {
                 entriesHashMap.clear()
@@ -217,7 +218,7 @@ class CustomerMilkEntry : AppCompatActivity() {
             val selectedItem = customerAutoComplete.text.toString()
             if(selectedItem.isNotEmpty()){
                 val index = adapter.getPosition(selectedItem)
-                Toast.makeText(this@CustomerMilkEntry, "$index", Toast.LENGTH_SHORT).show()
+
                 if(index < customerList.size-1){
                     val getCustomerNameByIndex = adapter.getItem(index+1)
                     if (getCustomerNameByIndex != null) {
@@ -246,6 +247,7 @@ class CustomerMilkEntry : AppCompatActivity() {
                                 if(first){
                                     first = false
                                     binding.custName.setText(customerName)
+                                    getThisCustomerData(customerName)
                                 }
                             }
                         }
@@ -304,6 +306,7 @@ class CustomerMilkEntry : AppCompatActivity() {
     }
 
     private fun getThisCustomerData(itemSelected: String) {
+        binding.custName.isEnabled = false
         mDbRef = FirebaseDatabase.getInstance().reference
         val databaseReference = mDbRef.child("2024").child("02")
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -321,6 +324,8 @@ class CustomerMilkEntry : AppCompatActivity() {
                         }
                     }
                 }
+                binding.custName.isEnabled = true
+
                 entriesAdapter.notifyDataSetChanged()
 
             }

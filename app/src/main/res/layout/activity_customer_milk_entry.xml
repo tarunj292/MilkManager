@@ -43,6 +43,7 @@
             android:layout_marginEnd="16dp"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
             <AutoCompleteTextView
+
                 android:id="@+id/custName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,14 +80,12 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:inputType="number"
             android:hint="@string/enter_value"
             android:textColorHint="@color/white"
-            android:textSize="30sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="30sp" />
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -94,12 +93,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_0_25"
-            android:textSize="16sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="16sp"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -107,12 +104,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_0_5"
-            android:textSize="23sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="23sp" />
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -120,12 +115,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_0_75"
-            android:textSize="16sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="16sp" />
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -133,12 +126,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_1"
-            android:textSize="30sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="30sp" />
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -146,12 +137,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_1_5"
-            android:textSize="29sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="29sp" />
         <com.google.android.material.button.MaterialButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -159,12 +148,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_2"
-            android:textSize="30sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/txtDate"
@@ -173,16 +160,13 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:hint="@string/enter_date"
             android:textColorHint="@color/white"
             android:textSize="30sp"
             android:clickable="true"
-            android:focusable="true"
-            app:cornerRadius="15dp"/>
-
+            android:focusable="true" />
 
         <ImageButton
             android:id="@+id/goBack"
@@ -191,11 +175,9 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:src="@drawable/go_back"
-            app:cornerRadius="15dp"
             android:contentDescription="@string/go_back"/>
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnQty"
@@ -204,12 +186,10 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/add"
-            android:textSize="17sp"
-            app:cornerRadius="15dp"/>
+            android:textSize="17sp" />
         <ImageButton
             android:id="@+id/goForward"
             android:layout_width="0dp"
@@ -217,10 +197,8 @@
             android:layout_rowWeight="1"
             android:layout_columnSpan="1"
             android:layout_columnWeight="1"
-            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:src="@drawable/go_forward"
-            app:cornerRadius="15dp"
             android:contentDescription="@string/go_forward"/>
 
 
