@@ -39,7 +39,17 @@ class CustomerMilkEntry : AppCompatActivity() {
         val month = date.substring(3, 5)
         val day = date.substring(0, 2)
 
+        val buildingList = listOf("Harsha","Kanan","Rekha","Seth " +
+                "Enclave","Usha Villa")
         val customerList = mutableListOf<String>()
+
+        val buildingAutoComplete: AutoCompleteTextView = findViewById(R.id.buildName)
+        val adapter = ArrayAdapter(this, R.layout.list_item, buildingList)
+        buildingAutoComplete.setAdapter(adapter)
+        buildingAutoComplete.onItemClickListener = AdapterView.OnItemClickListener { adapterView: AdapterView<*>, _: View, i: Int, _: Long ->
+            val itemSelected = adapterView.getItemAtPosition(i)
+            getThisBuildingsCustomer(itemSelected.toString(), customerList)
+        }
 
         mDbRef = FirebaseDatabase.getInstance().reference
         val databaseReference = mDbRef.child(year).child(month)
@@ -47,12 +57,14 @@ class CustomerMilkEntry : AppCompatActivity() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 customerList.clear()
-
                 for (snapshot in dataSnapshot.children) {//building name
-                    for(customer in snapshot.children){//customer name
-                        val customerName = customer.key
-                        if (customerName != null) {
-                            customerList.add(customerName)
+                    val currentItem = binding.buildName.text.toString()
+                    if(snapshot.key == currentItem){
+                        for(customer in snapshot.children){//customer name
+                            val customerName = customer.key
+                            if (customerName != null) {
+                                customerList.add(customerName)
+                            }
                         }
                     }
                 }
@@ -184,35 +196,79 @@ class CustomerMilkEntry : AppCompatActivity() {
             val customerAutoComplete: AutoCompleteTextView = findViewById(R.id.custName)
             val adapter = customerAutoComplete.adapter as ArrayAdapter<String>
             val selectedItem = customerAutoComplete.text.toString()
-            val index = adapter.getPosition(selectedItem)
-            if(index>0){
-                val getCustomerNameByIndex = adapter.getItem(index-1)
-                Toast.makeText(this@CustomerMilkEntry,"$getCustomerNameByIndex",Toast.LENGTH_SHORT).show()
-                if (getCustomerNameByIndex != null) {
-                    changeCustomerNameInDropDown(getCustomerNameByIndex)
+            if(selectedItem.isNotEmpty()){
+                val index = adapter.getPosition(selectedItem)
+                if(index>0){
+                    val getCustomerNameByIndex = adapter.getItem(index-1)
+                    if (getCustomerNameByIndex != null) {
+                        changeCustomerNameInDropDown(getCustomerNameByIndex)
+                    }
+                } else{
+                    Toast.makeText(this@CustomerMilkEntry, "You are at starting point", Toast.LENGTH_SHORT).show()
                 }
-            } else{
-                Toast.makeText(this@CustomerMilkEntry, "You are at starting point", Toast.LENGTH_SHORT).show()
             }
-//        createDataInDB(binding.txtQty.text.toString())
+
+//        createDataInDB()
         }
 
         binding.goForward.setOnClickListener{
             val customerAutoComplete: AutoCompleteTextView = findViewById(R.id.custName)
             val adapter = customerAutoComplete.adapter as ArrayAdapter<String>
             val selectedItem = customerAutoComplete.text.toString()
-            val index = adapter.getPosition(selectedItem)
-            if(index < customerList.size-1){
-                val getCustomerNameByIndex = adapter.getItem(index+1)
-                if (getCustomerNameByIndex != null) {
-                    changeCustomerNameInDropDown(getCustomerNameByIndex)
+            if(selectedItem.isNotEmpty()){
+                val index = adapter.getPosition(selectedItem)
+                Toast.makeText(this@CustomerMilkEntry, "$index", Toast.LENGTH_SHORT).show()
+                if(index < customerList.size-1){
+                    val getCustomerNameByIndex = adapter.getItem(index+1)
+                    if (getCustomerNameByIndex != null) {
+                        changeCustomerNameInDropDown(getCustomerNameByIndex)
+                    }
+                } else{
+                    Toast.makeText(this@CustomerMilkEntry, "All Done", Toast.LENGTH_SHORT).show()
                 }
-            } else{
-                Toast.makeText(this@CustomerMilkEntry, "All Done", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
+
+    private fun getThisBuildingsCustomer(itemSelected: String, customerList: MutableList<String>) {
+        mDbRef = FirebaseDatabase.getInstance().reference
+        val databaseReference = mDbRef.child("2024").child("02")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                customerList.clear()
+                var first = true
+                for (snapshot in dataSnapshot.children) {//building name
+                    if(itemSelected == snapshot.key){
+                        for(customer in snapshot.children){//customer name
+                            val customerName = customer.key
+                            if (customerName != null) {
+                                customerList.add(customerName)
+                                if(first){
+                                    first = false
+                                    binding.custName.setText(customerName)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val customerAutoComplete: AutoCompleteTextView = findViewById(R.id.custName)
+                val adapter = ArrayAdapter(this@CustomerMilkEntry, R.layout.list_item, customerList)
+                customerAutoComplete.setAdapter(adapter)
+                customerAutoComplete.onItemClickListener =
+                    AdapterView.OnItemClickListener { adapterView: AdapterView<*>, _: View, i: Int, _: Long ->
+                        val itemSelected = adapterView.getItemAtPosition(i)
+                        getThisCustomerData(itemSelected.toString())
+                    }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle onCancelled event
+                Toast.makeText(this@CustomerMilkEntry, "Failed to retrieve data from Firebase", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun changeCustomerNameInDropDown(getCustomerNameByIndex: String) {
         binding.custName.isEnabled = false
         mDbRef = FirebaseDatabase.getInstance().reference
@@ -222,10 +278,12 @@ class CustomerMilkEntry : AppCompatActivity() {
                 val customerList = mutableListOf<String>()
 
                 for (building in dataSnapshot.children) {//building name
-                    for(customer in building.children){//customer name
-                        val customerName = customer.key
-                        if (customerName != null) {
-                            customerList.add(customerName)
+                    if(building.key == binding.buildName.text.toString()){
+                        for(customer in building.children){//customer name
+                            val customerName = customer.key
+                            if (customerName != null) {
+                                customerList.add(customerName)
+                            }
                         }
                     }
                 }
@@ -273,13 +331,14 @@ class CustomerMilkEntry : AppCompatActivity() {
         })
     }
 
-    private fun createDataInDB(text: String?) {
+    private fun createDataInDB() {
         mDbRef = FirebaseDatabase.getInstance().reference
         val entries = (1..31).associateWith { "0" }.mapKeys { "${it.key.toString().padStart(2, '0')}D" }
         //above 2 lines are converted from for loop into this
-        if (text != null) {
-            mDbRef.child("2024").child("02").child(text).child("text").setValue(entries)
-        }
+            var d = listOf("807 Supr","703 Gokul","605 Amul","401 Gokul","305 Amul","104 Gokul")
+            for(i in d){
+                mDbRef.child("2024").child("02").child("Kanan").child(i).setValue(entries)
+            }
     }
 
     private fun doEntry(value: String, day: String) {
