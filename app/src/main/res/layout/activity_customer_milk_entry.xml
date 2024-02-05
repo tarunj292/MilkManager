@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".CustomerMilkEntry">
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -14,7 +13,6 @@
         android:orientation="vertical"
         android:focusableInTouchMode="true"
         app:layout_constraintTop_toTopOf="parent">
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,19 +20,15 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
             <AutoCompleteTextView
                 android:id="@+id/buildName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/item_label"
+                android:hint="Choose Building"
                 android:textColorHint="@color/white"
                 android:inputType="none"
                 tools:ignore="SpeakableTextPresentCheck" />
-
         </com.google.android.material.textfield.TextInputLayout>
-
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,12 +41,11 @@
                 android:id="@+id/custName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/item_label"
+                android:hint="Choose Flat"
                 android:textColorHint="@color/white"
                 android:inputType="none"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
-
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/entriesRecyclerView"
@@ -62,9 +55,7 @@
         android:fontFamily="@font/montserrat_medium"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="20dp" />
-
     <GridLayout
-        android:visibility="gone"
         android:id="@+id/layoutMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -153,7 +144,6 @@
             android:fontFamily="@font/montserrat_medium"
             android:text="@string/_2"
             android:textSize="30sp" />
-
         <TextView
             android:id="@+id/txtDate"
             android:layout_width="0dp"
@@ -168,7 +158,6 @@
             android:textSize="30sp"
             android:clickable="true"
             android:focusable="true" />
-
         <ImageButton
             android:id="@+id/goBack"
             android:layout_width="0dp"
@@ -201,9 +190,5 @@
             android:background="@android:color/transparent"
             android:src="@drawable/go_forward"
             android:contentDescription="@string/go_forward"/>
-
-
-
     </GridLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

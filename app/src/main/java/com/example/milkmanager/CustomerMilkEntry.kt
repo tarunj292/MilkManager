@@ -96,7 +96,7 @@ class CustomerMilkEntry : AppCompatActivity() {
         recyclerView.adapter = entriesAdapter
 
 
-//        below code from line 96 to 119 never executes because of no change in database customer name in real time
+//        below code from line 99 to 123 never executes because of no change in database customer name in real time
         mDbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(monthSnap: DataSnapshot) {
                 entriesHashMap.clear()
@@ -155,7 +155,7 @@ class CustomerMilkEntry : AppCompatActivity() {
         binding.btnQty.setOnClickListener {
             val txtQty = binding.txtQty.text.toString()
             if(txtQty.isNotEmpty()){
-                if (txtDate.isEmpty()) {
+                if (binding.txtDate.text.toString().isEmpty()) {
                     doEntry(txtQty, day)
                 } else {
                     doEntry(txtQty, txtDate)

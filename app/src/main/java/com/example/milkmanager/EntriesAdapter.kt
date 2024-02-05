@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 
-class EntriesAdapter(private val offersList: HashMap<String, String>, private val currentDate: String):
+class EntriesAdapter(private val entriesList: HashMap<String, String>, private val currentDate: String):
     RecyclerView.Adapter<EntriesAdapter.MyViewHolder>()
 {
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
@@ -29,7 +29,7 @@ class EntriesAdapter(private val offersList: HashMap<String, String>, private va
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // Sorting the entries of the HashMap by keys
-        val sortedEntries = offersList.entries.sortedBy { it.key }
+        val sortedEntries = entriesList.entries.sortedBy { it.key }
 
         // Getting the entry at the current position after sorting
         val entry = sortedEntries[position]
@@ -41,5 +41,5 @@ class EntriesAdapter(private val offersList: HashMap<String, String>, private va
 
 
 
-    override fun getItemCount() = offersList.size
+    override fun getItemCount() = entriesList.size
 }
