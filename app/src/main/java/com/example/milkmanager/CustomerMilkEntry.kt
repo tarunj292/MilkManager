@@ -237,19 +237,21 @@ class CustomerMilkEntry : AppCompatActivity() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 customerList.clear()
-                var first = true
                 for (snapshot in dataSnapshot.children) {//building name
                     if(itemSelected == snapshot.key){
                         for(customer in snapshot.children){//customer name
                             val customerName = customer.key
                             if (customerName != null) {
                                 customerList.add(customerName)
-                                if(first){
-                                    first = false
-                                    binding.custName.setText(customerName)
-                                    getThisCustomerData(customerName)
-                                }
                             }
+                        }
+                        val selectedItem = binding.custName.text.toString()
+                        if (selectedItem.isNotEmpty() && customerList.contains(selectedItem)) {
+                            binding.custName.setText(selectedItem)
+                            getThisCustomerData(selectedItem)
+                        } else {
+                            binding.custName.setText(customerList[0])
+                            getThisCustomerData(customerList[0])
                         }
                     }
                 }
